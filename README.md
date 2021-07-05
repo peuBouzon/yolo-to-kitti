@@ -1,7 +1,7 @@
 # yolo-to-kitti
 This repo converts yolo labels to kitti format.
 
-## Kitti format[source](https://github.com/NVIDIA/DIGITS/blob/v4.0.0-rc.3/digits/extensions/data/objectDetection/README.md)
+## Kitti format [source](https://github.com/NVIDIA/DIGITS/blob/v4.0.0-rc.3/digits/extensions/data/objectDetection/README.md)
 
 Data Format Description
 =======================
