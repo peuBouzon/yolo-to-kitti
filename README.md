@@ -13,7 +13,7 @@ Getting width and height dynamically from images:
 
   ```python yolotokitti.py --labels LABELS_FOLDER --images IMAGES_FOLDER```
 
-#### Label format
+## Label format
 
 From the doc of: [https://github.com/NVIDIA/DIGITS/blob/v4.0.0-rc.3/digits/extensions/data/objectDetection/README.md](https://github.com/NVIDIA/DIGITS/blob/v4.0.0-rc.3/digits/extensions/data/objectDetection/README.md)
 
