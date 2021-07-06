@@ -1,7 +1,19 @@
 # yolo-to-kitti
 This repo converts yolo labels to kitti format.
 
-#### Label format
+## Requirements 
+pip install Pillow
+
+## Usage 
+With known images height and width:
+
+  ```python yolotokitti.py --labels LABELS_FOLDER --height HEIGHT --width WIDTH```
+
+Getting width and height dynamically from images:
+
+  ```python yolotokitti.py --labels LABELS_FOLDER --images IMAGES_FOLDER```
+
+## Label format
 
 From the doc of: [https://github.com/NVIDIA/DIGITS/blob/v4.0.0-rc.3/digits/extensions/data/objectDetection/README.md](https://github.com/NVIDIA/DIGITS/blob/v4.0.0-rc.3/digits/extensions/data/objectDetection/README.md)
 
