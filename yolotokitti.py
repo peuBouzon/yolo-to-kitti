@@ -2,7 +2,7 @@ import argparse
 import pathlib
 import shutil
 from PIL import Image
-from tqdm import tqdm
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--labels', help="yolo labels folder",
                     type=str, required=True)
@@ -39,14 +39,15 @@ if kitti_folder.is_dir():
 kitti_folder.mkdir()
 
 missed_images = []
-for label_path in tqdm(list(labels_folder.iterdir())):
+for label_path in labels_folder.iterdir():
     if not fixed_dimensions:
         image_path = images_folder / label_path.stem
         suffixes = ['.jpg', '.png', '.jpeg']
         for suffix in suffixes:
             image_path = image_path.with_suffix(suffix)
             try:
-                image_width, image_height = Image.open(image_path).size
+                image = Image.open(image_path)
+                image_width, image_height = image.size
                 break
             except FileNotFoundError:
                 continue
@@ -57,7 +58,7 @@ for label_path in tqdm(list(labels_folder.iterdir())):
         image_width, image_height = args.width, args.height
 
     kitti_lines = []
-    with open(label_path) as f:
+    with open(label_path, 'r') as f:
         for line in f.readlines():
             line = line.strip().split(' ')
             class_ = int(line[0])
@@ -65,10 +66,15 @@ for label_path in tqdm(list(labels_folder.iterdir())):
             y_center = float(line[2])*image_height
             bbox_width = float(line[3])*image_width
             bbox_height = float(line[4])*image_height
-            # kitti format: '-1 -1 -10 x_min y_min x_max y_max -1 -1 -1 -1000 -1000 -1000 -10\n'
+            x_min = x_center - bbox_width / 2
+            y_min = y_center - bbox_height / 2
+            x_max = x_min + bbox_width
+            y_max = y_min + bbox_height
             kitti_lines.append(
-                f'{classes_map[class_]} -1 -1 -10 {x_center / 2:.2f} {y_center / 2:.2f} {(x_center / 2 + bbox_width):.2f} {(y_center / 2 + bbox_height):.2f} -1 -1 -1 -1000 -1000 -1000 -10\n')
+                f'{classes_map[class_]} -1 -1 -10 {x_min:.2f} {y_min:.2f} {x_max:.2f} {y_max:.2f} -1 -1 -1 -1000 -1000 -1000 -10\n')
+
     with open(kitti_folder / f'{label_path.stem}.txt', mode='w') as f:
+
         f.writelines(kitti_lines)
 if not fixed_dimensions and missed_images:
     print(
